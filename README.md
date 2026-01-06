@@ -1,8 +1,7 @@
 # Wissenschaftliches-Arbeiten 
 
 Inhaltsverzeichnis
-[Gruppenmitglieder]
-(#gruppenmitglieder)
+[Gruppenmitglieder] (#gruppenmitglieder)
 
 Gruppenmitglieder
 Paul Dickmann
