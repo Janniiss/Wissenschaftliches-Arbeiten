@@ -3,7 +3,7 @@
 ## Inhaltsverzeichnis
 - [Gruppenmitglieder](#gruppenmitglieder)
 - [Projektbeschreibung](#projektbeschreibung)
-- [Aufgabestellung](#aufgabenstellung)
+- [Aufgabenstellung](#aufgabenstellung)
 ***
 
 ## Gruppenmitglieder 
