@@ -18,3 +18,9 @@ labels = c("Cherbourg", "Queenstown", "Southampton"))
 # c)
 # überführen der Variable "Pclass" in einen ordered-factor
 datensatz$Pclass <- factor(datensatz$Pclass, levels = c(1, 2, 3),ordered = TRUE)
+
+# d)
+
+# e)
+
+# f)
