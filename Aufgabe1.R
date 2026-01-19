@@ -47,13 +47,13 @@ datensatz$Pclass <- factor(datensatz$Pclass, levels = c(1, 2, 3),ordered = TRUE)
 # Imputieren der fehlenden Werte in der Variable „Age“ mithilfe der erzeugten
 # Variable „Anrede“
 
-# Datensatz um Anrede erweitern
+# Datensatz um die Variable "Anrede" erweitern
 datensatz$Anrede <- Anrede
 
-# Median-Alter pro Anrede berechnen 
+# Median-Alter pro Anrede mittels tapply berechnen 
 median_alter <- tapply(datensatz$Age, datensatz$Anrede, median, na.rm = TRUE)
 
-# Fehlende Werte imputieren
+# Fehlende Werte in die Variable "Age" imputieren
 for (i in which(is.na(datensatz$Age))) {
   datensatz$Age[i] <- median_alter[datensatz$Anrede[i]]
 }
@@ -63,15 +63,16 @@ for (i in which(is.na(datensatz$Age))) {
 # Neue Variablen „Deck“ und „Seite“ mithilfe der Variable "Cabin" erstellen
 
 
-# Einträge mit unbekannter Kabinennummer werden auf NA gesetzt
-# zuerst, damit es bei Deck und Seite zu keinen Fehlern kommt
+# Einträge mit unbekannter Kabinennummer werden auf NA gesetzt.
+# Die passiert zuerst, damit es bei Deck und Seite zu keinen Fehlern kommt
 datensatz$Cabin[datensatz$Cabin == ""] <- NA
 
 # Extrahiert mittsels substr das erste Zeichen der Kabinenbezeichnung (das Deck)
 # und wandelt es in eine neue Variable „Deck“ um
 datensatz$Deck <- substr(datensatz$Cabin, 1, 1)
 
-# Kabinennummer extrahieren, für einfacheren zugriff auf dei Kabinennummer
+# Kabinennummer mittels gsub extrahieren, welches alle Buchstaben aus Cabin, 
+# für einfacheren zugriff auf die Kabinennummer, entfernt
 Kabinennummer <- as.numeric(gsub("[A-Za-z]", "", datensatz$Cabin))
 
 # Seite bestimmen: Kabinen mit einer ungeraden Nummer liegen
