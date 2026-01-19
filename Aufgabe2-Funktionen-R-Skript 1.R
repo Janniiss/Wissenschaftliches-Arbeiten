@@ -72,7 +72,7 @@ if(!all(test$Merkmalsausprägungen == c("A", "B", "C", "D", "E"))){
 library(dplyr)
 library(psych) #Punktbasierte Korrelation  
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
-deskriptive_bivariate <- function(data, dichotom_var, metric_var){
+deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
   
 # Deskriptive Statistiken nach Gruppen
   # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
@@ -108,7 +108,7 @@ invisible(list("Deskriptive Statistiken nach Gruppen" = descriptives, "Punktbasi
 
 # Test mit Titanic Datensatz
 titanic <- read.csv("titanic_clean.csv")
-deskriptive_bivariate(data = titanic, "Survived", "Age")
+deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
 
 
 # 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
