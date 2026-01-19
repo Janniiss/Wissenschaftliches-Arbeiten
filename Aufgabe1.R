@@ -8,18 +8,38 @@ datensatz <- read.csv("titanic.csv")
 # a) (Paul)
 
 # Anrede herausfiltern
-Anrede <- sub('.*, ([A-Za-z]+)\\..*', '\\1', datensatz$Name)
+# Hier wird dien Anrede herausgefiltert,
+#indem der Text zwischen dem Komma und dem Punkt extrahiert wird
 
+Anrede <- sub('.*, ([A-Za-z ]+)\\..*', '\\1', datensatz$Name)
+
+# Nach einem Vorschlag von Janiss werden die Anreden nun alle zu den Variablen
+# Mr, Mrs, Miss und Master zusammengefasst:
+# Also werden mademoiselle und ms  zu Miss
+Anrede[Anrede %in% c("Mlle", "Ms")] <- "Miss"
+# Mme,Lady, the countess und Dona werden zu Mrs 
+Anrede[Anrede %in% c( "Mme", "Lady", "the Countess", "Dona")] <- "Mrs"
+# Capt, Col, Major, Sir, Rev, Don, "Jonkheer" und Dr werden zu Mr
+Anrede[Anrede %in% c("Capt", "Col", "Major", "Dr", "Sir", "Rev", "Don", "Jonkheer" )] <- "Mr"
+unique(Anrede)
 # b) (Paul)
 
 # Codieren der Variablen "Survived","Sex" und "Embarked" als factor
+
+# Bei Survived werden 0 und 1 in No und Yes umgewandelt
 datensatz$Survived <- factor(datensatz$Survived, levels = c(0, 1), labels = c("No", "Yes"))
+
+# Bei Sex werden die Einträge nicht geändert, aber in einen Factor übertragen
 datensatz$Sex <- factor(datensatz$Sex, levels = c("male", "female"))
+
+# Bei Embarked werden die Abkürzungen nun ausgeschrieben
 datensatz$Embarked <- factor(datensatz$Embarked, levels = c("C", "Q", "S"),
 labels = c("Cherbourg", "Queenstown", "Southampton"))
 
 # c) (Paul)
+
 # überführen der Variable "Pclass" in einen ordered-factor
+# Also gilt dann 1>2>3
 datensatz$Pclass <- factor(datensatz$Pclass, levels = c(1, 2, 3),ordered = TRUE)
 
 # d) (Henning)
