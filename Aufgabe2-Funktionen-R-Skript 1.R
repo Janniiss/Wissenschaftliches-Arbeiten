@@ -118,11 +118,25 @@ deskriptive_bivariate_kategorial(data = titanic, "Survived", "Sex")
 # iv.) (Jannis)
 
 library(dplyr)
-library(psych) #Punktbasierte Korrelation  
+library(psych) #Punktbasierte Korrelation 
+
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
 deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
   
-# Deskriptive Statistiken nach Gruppen
+  # Checks
+  if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
+    stop("Eine oder beide Variablen existieren nicht im Datensatz.")
+  }
+  
+  if (length(unique(data[[dichotom_var]])) != 2) {
+    stop("Die erste Variable muss dichotom sein.")
+  }
+  
+  if (!is.numeric(data[[metric_var]])) {
+    stop("Die zweite Variable muss metrisch sein.")
+  }
+  
+  #Deskriptive Statistiken nach Gruppen
   # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
   descriptives <- data %>%
     
