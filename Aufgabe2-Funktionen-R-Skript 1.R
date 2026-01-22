@@ -5,11 +5,14 @@ library(ggplot2)
 
 # Aufgabe 2a
 
-# i)
+# i) (Katharina)
 # Funktion, die verschiedene geeignete deskriptive Statistiken für metrische Variablen
 # berechnet und ausgibt
 
 deskriptive_metrisch <- function(data) {
+  if(!is.numeric(data)) {
+    stop(paste("Die Eingabe muss numerisch sein."))
+  } # Checken, ob Variable metrisch ist 
   min <- min(data) # Minimum berechnen mit base R Funktion
   max <- max(data) # Maximum berechnen mit base R Funktion
   mean <- mean(data) # arithmethisches Mittel berechnen mit base R Funktion
@@ -27,7 +30,7 @@ deskriptive_metrisch <- function(data) {
 # Test:
 df <- c(1 , 5, 3, 100 , 64 , 21)
 deskriptive_metrisch(df)
-
+df <- c("b" , "f" , "f")
 
 # ii. (Paul)
 
