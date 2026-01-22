@@ -176,7 +176,8 @@ titanic <- read.csv("titanic_clean.csv")
 deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
 
 
-# 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
+# 2.v) (Henning)
+# Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
 # Eingabe:
 # - data: Datensatz
 # - ... : 3 oder 4 Variablennamen als Strings (z.B. "Sex", "Pclass", "Survived")
