@@ -5,11 +5,14 @@ library(ggplot2)
 
 # Aufgabe 2a
 
-# i)
+# i) (Katharina)
 # Funktion, die verschiedene geeignete deskriptive Statistiken für metrische Variablen
 # berechnet und ausgibt
 
 deskriptive_metrisch <- function(data) {
+  if(!is.numeric(data)) {
+    stop(paste("Die Eingabe muss numerisch sein."))
+  } # Checken, ob Variable metrisch ist 
   min <- min(data) # Minimum berechnen mit base R Funktion
   max <- max(data) # Maximum berechnen mit base R Funktion
   mean <- mean(data) # arithmethisches Mittel berechnen mit base R Funktion
@@ -27,6 +30,7 @@ deskriptive_metrisch <- function(data) {
 # Test:
 df <- c(1 , 5, 3, 100 , 64 , 21)
 deskriptive_metrisch(df)
+df <- c("b" , "f" , "f")
 
 # ii. (Paul)
 
@@ -66,6 +70,111 @@ if(!all(test$Merkmalsausprägungen == c("A", "B", "C", "D", "E"))){
 }
 
 
+# iii) (Johannes)
+
+library(dplyr)
+library(vcd)  # Für Assoziationsmaße wie Phi-Koeffizient
+
+# Funktion: Deskriptive bivariate Statistik für den Zusammenhang zwischen zwei kategoriale Variablen
+deskriptive_bivariate_kategorial <- function(data, var1, var2) {
+  
+  # Kontingenztabelle
+  cat("\nKontingenztabelle:\n")
+  tbl <- table(data[[var1]], data[[var2]])
+  print(tbl)
+  
+  # Relative Häufigkeiten (gesamt)
+  cat("\nRelative Häufigkeiten (gesamt):\n")
+  print(prop.table(tbl))
+  
+  # Zeilenweise relative Häufigkeiten 
+  # --> Verteilung von var2 innerhalb der Kategorien von var1
+  cat("\nRelative Häufigkeiten (zeilenweise):\n")
+  print(prop.table(tbl, margin = 1))
+  
+  # Spaltenweise relative Häufigkeiten
+  # --> Verteilung von var1 innerhalb der Kategorien von var2
+  cat("\nRelative Häufigkeiten (spaltenweise):\n")
+  print(prop.table(tbl, margin = 2))
+  
+  # Korrigiertes Kontingenzmaß von Pearson
+  n <- sum(tbl)     # Stichprobengröße
+  r <- nrow(tbl)    # Anzahl Zeilen der Kontingenztabelle
+  k <- ncol(tbl)    # Anzahl Spalten der Kontingenztabelle
+  
+  # Chi-Quadrat Test nach Pearson (wird nur benötigt, um den Chi-Quadrat-Wert zu erhalten)
+  pearson <- chisq.test(tbl)
+  
+  # Korrigiertes Kontingenzmaß von Pearson
+  KKP <- sqrt(pearson$statistic/(pearson$statistic + n)) * sqrt(min(r,k)/(min(r,k)-1))
+  
+  cat("\nKorrigiertes Kontingenzmaß von Pearson:\n")
+  print(KKP)
+}
+
+# Beispielanwendung mit Titanic-Datensatz
+
+titanic <- read.csv("titanic_clean.csv")
+deskriptive_bivariate_kategorial(data = titanic, "Survived", "Sex")
+
+
+# iv.) (Jannis)
+
+library(dplyr)
+library(psych) #Punktbasierte Korrelation 
+
+# data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
+deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
+  
+  # Checks
+  if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
+    stop("Eine oder beide Variablen existieren nicht im Datensatz.")
+  }
+  
+  if (length(unique(data[[dichotom_var]])) != 2) {
+    stop("Die erste Variable muss dichotom sein.")
+  }
+  
+  if (!is.numeric(data[[metric_var]])) {
+    stop("Die zweite Variable muss metrisch sein.")
+  }
+  
+  #Deskriptive Statistiken nach Gruppen
+  # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
+  descriptives <- data %>%
+    
+  # Gruppierung nach den Ausprägungen der dichotomen Variable
+  group_by(.data[[dichotom_var]]) %>%
+    # Berechnung der deskriptiven Kennwerte je Gruppe
+    summarise(
+      n = n(),                             # Stichprobengröße pro Gruppe
+      mean = mean(.data[[metric_var]]),    # Mittelwert der metrischen Variable
+      SD = sd(.data[[metric_var]])         # Standardabweichung der metrischen Variable
+    )
+# Ausgabe der deskriptiven Statistiken
+cat("\nDeskriptive Statistiken nach Gruppen:\n")
+print(descriptives)
+
+# Punktbasierte Korrelation
+# Berechnung der punktbasierten Korrelation zwischen der dichotomen und der metrischen Variable
+# Die dichotome Variable wird zuerst in einen Faktor und anschließend in numerische Werte (0/1) umgewandelt
+point_biserial <- biserial(
+  data[[metric_var]],
+  as.numeric(as.factor(data[[dichotom_var]]))
+)
+
+# Ausgabe der Korrelation
+cat("\nPunktbasierte Korrelation:\n")
+print(point_biserial)
+
+# Ergebnisse werden als Liste zurückgegeben
+invisible(list("Deskriptive Statistiken nach Gruppen" = descriptives, "Punktbasierte Korrelation" = point_biserial))
+}
+
+# Test mit Titanic Datensatz
+titanic <- read.csv("titanic_clean.csv")
+deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
+
 
 # 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
 # Eingabe:
@@ -100,4 +209,3 @@ visualisierung <- function(data, ...) {
   
   return(p)
 }
-
