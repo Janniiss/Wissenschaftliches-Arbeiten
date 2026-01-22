@@ -36,7 +36,12 @@ df <- c("b" , "f" , "f")
 
 # berechnet deskriptive Statistiken für kategoriale Merkmale
 deskriptive_kategoriell= function(data){
-
+  
+  # checken ob die Eingabe kategoriell ist
+if (!is.character(data) && !is.factor(data)) {
+  stop(paste("Die Eingabe muss kategorisch sein."))
+   }
+  
   #modalwert berechnen indem der Name der häufigsten Merkmalsausprägung
   #ausgegeben wird
   
