@@ -5,11 +5,14 @@ library(ggplot2)
 
 # Aufgabe 2a
 
-# i)
+# i) (Katharina)
 # Funktion, die verschiedene geeignete deskriptive Statistiken für metrische Variablen
 # berechnet und ausgibt
 
 deskriptive_metrisch <- function(data) {
+  if(!is.numeric(data)) {
+    stop(paste("Die Eingabe muss numerisch sein."))
+  } # Checken, ob Variable metrisch ist 
   min <- min(data) # Minimum berechnen mit base R Funktion
   max <- max(data) # Maximum berechnen mit base R Funktion
   mean <- mean(data) # arithmethisches Mittel berechnen mit base R Funktion
@@ -27,13 +30,18 @@ deskriptive_metrisch <- function(data) {
 # Test:
 df <- c(1 , 5, 3, 100 , 64 , 21)
 deskriptive_metrisch(df)
-
+df <- c("b" , "f" , "f")
 
 # ii. (Paul)
 
 # berechnet deskriptive Statistiken für kategoriale Merkmale
 deskriptive_kategoriell= function(data){
-
+  
+  # checken ob die Eingabe kategoriell ist
+if (!is.character(data) && !is.factor(data)) {
+  stop(paste("Die Eingabe muss kategorisch sein."))
+   }
+  
   #modalwert berechnen indem der Name der häufigsten Merkmalsausprägung
   #ausgegeben wird
   
@@ -118,11 +126,25 @@ deskriptive_bivariate_kategorial(data = titanic, "Survived", "Sex")
 # iv.) (Jannis)
 
 library(dplyr)
-library(psych) #Punktbasierte Korrelation  
+library(psych) #Punktbasierte Korrelation 
+
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
 deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
   
-# Deskriptive Statistiken nach Gruppen
+  # Checks
+  if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
+    stop("Eine oder beide Variablen existieren nicht im Datensatz.")
+  }
+  
+  if (length(unique(data[[dichotom_var]])) != 2) {
+    stop("Die erste Variable muss dichotom sein.")
+  }
+  
+  if (!is.numeric(data[[metric_var]])) {
+    stop("Die zweite Variable muss metrisch sein.")
+  }
+  
+  #Deskriptive Statistiken nach Gruppen
   # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
   descriptives <- data %>%
     
@@ -159,7 +181,8 @@ titanic <- read.csv("titanic_clean.csv")
 deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
 
 
-# 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
+# 2.v) (Henning)
+# Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
 # Eingabe:
 # - data: Datensatz
 # - ... : 3 oder 4 Variablennamen als Strings (z.B. "Sex", "Pclass", "Survived")
