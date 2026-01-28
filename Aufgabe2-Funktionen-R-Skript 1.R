@@ -195,8 +195,15 @@ deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
 # Ausgabe:
 # - ggplot-Objekt (Plot) welcher die Variablen 1 und 2 vergleicht und die Variablen 3 und 4 als Facets darstellt
 
-visualisierung <- function(data, ...) {
+visualisierung <- function(data, ..., ignore_na = TRUE) {
   var <- check(data, ...)  # var ist ein Vektor mit 3 oder 4 Variablennamen
+  
+  
+  # NA´s entfernen
+  if (ignore_na) {
+    data <- data[stats::complete.cases(data[, var]), ]
+  }
+  
   
   # Basisplot: 1. Variable auf x,die  2. Variable wird als Farbe dargestellt
   p <- ggplot(data, aes_string(x = var[1], fill = var[2])) +
