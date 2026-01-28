@@ -135,56 +135,55 @@ library(dplyr)
 library(psych) #Punktbasierte Korrelation 
 
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
-deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
+deskriptive_bivariate_metrisch_dichotom <- function(data, var1, var2) {
   
-  # Checks
-  if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
+  if (!(var1 %in% names(data)) || !(var2 %in% names(data))) {
     stop("Eine oder beide Variablen existieren nicht im Datensatz.")
   }
   
-  if (length(unique(data[[dichotom_var]])) != 2) {
-    stop("Die erste Variable muss dichotom sein.")
+  # Typen erkennen
+  if (length(unique(na.omit(data[[var1]]))) == 2 && is.numeric(data[[var2]])) {
+    dichotom_var <- var1
+    metric_var <- var2
+  } else if (length(unique(na.omit(data[[var2]]))) == 2 && is.numeric(data[[var1]])) {
+    dichotom_var <- var2
+    metric_var <- var1
+  } else {
+    stop("Es muss eine dichotome und eine metrische Variable übergeben werden.")
   }
   
-  if (!is.numeric(data[[metric_var]])) {
-    stop("Die zweite Variable muss metrisch sein.")
-  }
-  
-  #Deskriptive Statistiken nach Gruppen
-  # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
+  # Deskriptive Statistiken
   descriptives <- data %>%
-    
-  # Gruppierung nach den Ausprägungen der dichotomen Variable
-  group_by(.data[[dichotom_var]]) %>%
-    # Berechnung der deskriptiven Kennwerte je Gruppe
+    group_by(.data[[dichotom_var]]) %>%
     summarise(
-      n = n(),                             # Stichprobengröße pro Gruppe
-      mean = mean(.data[[metric_var]]),    # Mittelwert der metrischen Variable
-      SD = sd(.data[[metric_var]])         # Standardabweichung der metrischen Variable
+      n = n(),
+      mean = mean(.data[[metric_var]], na.rm = TRUE),
+      SD = sd(.data[[metric_var]], na.rm = TRUE),
+      .groups = "drop"
     )
-# Ausgabe der deskriptiven Statistiken
-cat("\nDeskriptive Statistiken nach Gruppen:\n")
-print(descriptives)
-
-# Punktbasierte Korrelation
-# Berechnung der punktbasierten Korrelation zwischen der dichotomen und der metrischen Variable
-# Die dichotome Variable wird zuerst in einen Faktor und anschließend in numerische Werte (0/1) umgewandelt
-point_biserial <- biserial(
-  data[[metric_var]],
-  as.numeric(as.factor(data[[dichotom_var]]))
-)
-
-# Ausgabe der Korrelation
-cat("\nPunktbasierte Korrelation:\n")
-print(point_biserial)
-
-# Ergebnisse werden als Liste zurückgegeben
-invisible(list("Deskriptive Statistiken nach Gruppen" = descriptives, "Punktbasierte Korrelation" = point_biserial))
+  
+  cat("\nDeskriptive Statistiken nach Gruppen:\n")
+  print(descriptives)
+  
+  # Punktbiseriale Korrelation
+  point_biserial <- biserial(
+    data[[metric_var]],
+    as.numeric(as.factor(data[[dichotom_var]]))
+  )
+  
+  cat("\nPunktbasierte Korrelation:\n")
+  print(point_biserial)
+  
+  invisible(list(
+    Deskriptive_Statistiken = descriptives,
+    Punktbiseriale_Korrelation = point_biserial
+  ))
 }
+
 
 # Test mit Titanic Datensatz
 titanic <- read.csv("titanic_clean.csv")
-deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
+deskriptive_bivariate_metrisch_dichotom(data = titanic, "Age", "Survived")
 
 
 # 2.v) (Henning)
