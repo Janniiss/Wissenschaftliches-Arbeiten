@@ -5,11 +5,14 @@ library(ggplot2)
 
 # Aufgabe 2a
 
-# i)
+# i) (Katharina)
 # Funktion, die verschiedene geeignete deskriptive Statistiken für metrische Variablen
 # berechnet und ausgibt
 
 deskriptive_metrisch <- function(data) {
+  if(!is.numeric(data)) {
+    stop(paste("Die Eingabe muss numerisch sein."))
+  } # Checken, ob Variable metrisch ist 
   min <- min(data) # Minimum berechnen mit base R Funktion
   max <- max(data) # Maximum berechnen mit base R Funktion
   mean <- mean(data) # arithmethisches Mittel berechnen mit base R Funktion
@@ -27,13 +30,18 @@ deskriptive_metrisch <- function(data) {
 # Test:
 df <- c(1 , 5, 3, 100 , 64 , 21)
 deskriptive_metrisch(df)
-
+df <- c("b" , "f" , "f")
 
 # ii. (Paul)
 
 # berechnet deskriptive Statistiken für kategoriale Merkmale
 deskriptive_kategoriell= function(data){
-
+  
+  # checken ob die Eingabe kategoriell ist
+if (!is.character(data) && !is.factor(data)) {
+  stop(paste("Die Eingabe muss kategorisch sein."))
+   }
+  
   #modalwert berechnen indem der Name der häufigsten Merkmalsausprägung
   #ausgegeben wird
   
@@ -67,13 +75,67 @@ if(!all(test$Merkmalsausprägungen == c("A", "B", "C", "D", "E"))){
 }
 
 
+# iii) (Johannes)
+
+library(dplyr)
+library(vcd)  # Für Assoziationsmaße wie Phi-Koeffizient
+
+# Funktion: Deskriptive bivariate Statistik für den Zusammenhang zwischen zwei kategoriale Variablen
+deskriptive_bivariate_kategorial <- function(data, var1, var2) {
+  
+  # Prüfen, ob eine der Variablen numerisch ist
+  # Falls ja: Abbruch, da die Funktion nur für kategoriale Variablen gedacht ist
+  if (is.numeric(data[[var1]]) || is.numeric(data[[var2]])) {
+    stop("Beide Variablen müssen kategorial sein.")
+  }
+  
+  # Kontingenztabelle
+  cat("\nKontingenztabelle:\n")
+  tbl <- table(data[[var1]], data[[var2]])
+  print(tbl)
+  
+  # Relative Häufigkeiten (gesamt)
+  cat("\nRelative Häufigkeiten (gesamt):\n")
+  print(prop.table(tbl))
+  
+  # Zeilenweise relative Häufigkeiten 
+  # --> Verteilung von var2 innerhalb der Kategorien von var1
+  cat("\nRelative Häufigkeiten (zeilenweise):\n")
+  print(prop.table(tbl, margin = 1))
+  
+  # Spaltenweise relative Häufigkeiten
+  # --> Verteilung von var1 innerhalb der Kategorien von var2
+  cat("\nRelative Häufigkeiten (spaltenweise):\n")
+  print(prop.table(tbl, margin = 2))
+  
+  # Korrigiertes Kontingenzmaß von Pearson
+  n <- sum(tbl)     # Stichprobengröße
+  r <- nrow(tbl)    # Anzahl Zeilen der Kontingenztabelle
+  k <- ncol(tbl)    # Anzahl Spalten der Kontingenztabelle
+  
+  # Chi-Quadrat Test nach Pearson (wird nur benötigt, um den Chi-Quadrat-Wert zu erhalten)
+  pearson <- chisq.test(tbl)
+  
+  # Korrigiertes Kontingenzmaß von Pearson
+  KKP <- sqrt(pearson$statistic/(pearson$statistic + n)) * sqrt(min(r,k)/(min(r,k)-1))
+  
+  cat("\nKorrigiertes Kontingenzmaß von Pearson:\n")
+  print(KKP)
+}
+
+# Beispielanwendung mit Titanic-Datensatz
+
+titanic <- read.csv("titanic_clean.csv")
+deskriptive_bivariate_kategorial(data = titanic, "Survived", "Sex")
+
+
 # iv.) (Jannis)
 
 library(dplyr)
 library(psych) #Punktbasierte Korrelation 
 
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
-deskriptive_bivariate <- function(data, dichotom_var, metric_var){
+deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
   
   # Checks
   if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
@@ -122,18 +184,26 @@ invisible(list("Deskriptive Statistiken nach Gruppen" = descriptives, "Punktbasi
 
 # Test mit Titanic Datensatz
 titanic <- read.csv("titanic_clean.csv")
-deskriptive_bivariate(data = titanic, "Survived", "Age")
+deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
 
 
-# 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
+# 2.v) (Henning)
+# Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
 # Eingabe:
 # - data: Datensatz
 # - ... : 3 oder 4 Variablennamen als Strings (z.B. "Sex", "Pclass", "Survived")
 # Ausgabe:
 # - ggplot-Objekt (Plot) welcher die Variablen 1 und 2 vergleicht und die Variablen 3 und 4 als Facets darstellt
 
-visualisierung <- function(data, ...) {
+visualisierung <- function(data, ..., ignore_na = TRUE) {
   var <- check(data, ...)  # var ist ein Vektor mit 3 oder 4 Variablennamen
+  
+  
+  # NA´s entfernen
+  if (ignore_na) {
+    data <- data[stats::complete.cases(data[, var]), ]
+  }
+  
   
   # Basisplot: 1. Variable auf x,die  2. Variable wird als Farbe dargestellt
   p <- ggplot(data, aes_string(x = var[1], fill = var[2])) +
