@@ -52,3 +52,11 @@ check <- function(data, ...) {
   }
   return(var)
 }
+
+
+# vi.) (Jannis)
+
+# Hilfsfunktion: kategorial erkennen
+is_cat <- function(x) {
+  is.factor(x) || is.character(x)
+}
