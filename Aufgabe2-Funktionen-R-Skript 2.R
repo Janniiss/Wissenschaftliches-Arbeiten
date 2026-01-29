@@ -56,7 +56,17 @@ check <- function(data, ...) {
 
 # vi.) (Jannis)
 
-# Hilfsfunktion: kategorial erkennen
-is_cat <- function(x) {
-  is.factor(x) || is.character(x)
+check_vars <- function(data, ...) {
+  vars <- c(...)
+  
+  # Prüfen ob Variablen existieren
+  if (!all(vars %in% names(data))) {
+    stop("Mindestens eine Variable existiert nicht im Datensatz.")
+  }
+return(vars)
 }
+  # Hilfsfunktion: kategorial erkennen
+  is_cat <- function(x) {
+    is.factor(x) || is.character(x)
+  }
+

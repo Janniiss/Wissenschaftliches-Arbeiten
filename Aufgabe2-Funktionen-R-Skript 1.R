@@ -1,5 +1,4 @@
 source("Aufgabe2-Funktionen-R-Skript 2.R")
-
 library(ggplot2)
 
 
@@ -234,12 +233,7 @@ visualisierung <- function(data, ..., ignore_na = TRUE) {
 visualisierung_1Var_2Var <- function(data, ...) {
   vars <- c(...)
   
-  # Prüfen ob Variablen existieren
-  if (!all(vars %in% names(data))) {
-    stop("Mindestens eine Variable existiert nicht im Datensatz.")
-  }
-  
-  
+  check_vars(data,vars)
   # -----------------------
   # 1 Variable
   # -----------------------
