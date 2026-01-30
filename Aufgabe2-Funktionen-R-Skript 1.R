@@ -1,5 +1,4 @@
 source("Aufgabe2-Funktionen-R-Skript 2.R")
-
 library(ggplot2)
 
 
@@ -227,3 +226,105 @@ visualisierung <- function(data, ..., ignore_na = TRUE) {
   
   return(p)
 }
+
+
+# vi.) (Jannis)
+
+visualisierung_1Var_2Var <- function(data, ...) {
+  vars <- c(...)
+  
+  check_vars(data,vars)
+  # -----------------------
+  # 1 Variable
+  # -----------------------
+  if (length(vars) == 1) {
+    v <- vars[1]
+    data2 <- data[!is.na(data[[v]]), ]
+    
+    if (!is_cat(data2[[v]])) {
+      # metrisch
+      p <- ggplot(data2, aes(x = .data[[v]])) +
+        geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+        labs(
+          title = paste("Histogramm von", v),
+          x = v,
+          y = "Anzahl"
+        ) +
+        theme_minimal()
+      
+      return(p)
+      
+    } else {
+      # kategorial
+      p <- ggplot(data2, aes(x = .data[[v]])) +
+        geom_bar(
+          aes(y = after_stat(count / sum(count))),
+          fill = "steelblue"
+        ) +
+        scale_y_continuous(labels = scales::percent) +
+        labs(
+          title = paste("Relative Häufigkeit von", v),
+          x = v,
+          y = "Relative Häufigkeit"
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+  }
+  
+  # -----------------------
+  # 2 Variablen
+  # -----------------------
+  if (length(vars) == 2) {
+    v1 <- vars[1]
+    v2 <- vars[2]
+    
+    data2 <- data[complete.cases(data[, vars]), ]
+    
+    cat1 <- is_cat(data2[[v1]])
+    cat2 <- is_cat(data2[[v2]])
+    
+    # kategorial + metrisch
+    if (cat1 != cat2) {
+      cat_var <- if (cat1) v1 else v2
+      met_var <- if (cat1) v2 else v1
+      
+      p <- ggplot(data2, aes(x = .data[[cat_var]], y = .data[[met_var]])) +
+        geom_boxplot(fill = "steelblue") +
+        labs(
+          title = paste("Boxplot:", met_var, "nach", cat_var),
+          x = cat_var,
+          y = met_var
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+    
+    # 2 kategorial
+    if (cat1 && cat2) {
+      p <- ggplot(data2, aes(x = .data[[v1]], fill = .data[[v2]])) +
+        geom_bar(position = "stack") +
+        labs(
+          title = paste("Beziehung:", v1, "und", v2),
+          x = v1,
+          y = "Anzahl",
+          fill = v2
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+    
+    stop("Kombination nicht unterstützt.")
+  }
+  
+  stop("Bitte 1 oder 2 Variablen übergeben.")
+}
+
+
+visualisierung_1Var_2Var(titanic_clean,"Age")
+visualisierung_1Var_2Var(titanic_clean, "Sex")
+visualisierung_1Var_2Var(titanic_clean, "Sex", "Survived")
+visualisierung_1Var_2Var(titanic_clean, "Embarked", "Survived")
