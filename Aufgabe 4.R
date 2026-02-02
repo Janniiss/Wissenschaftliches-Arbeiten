@@ -199,8 +199,57 @@ ggsave("Survived_Deck.png",
 
 
 
+# Jannis
+# ============================
+# (iv) deskriptive_bivariate_metrisch_dichotom()
+# ============================
+deskriptive_bivariate_metrisch_dichotom(datensatz, "Survived", "Age")
+
+# Deskriptive Statistiken nach Gruppen:
+#   # A tibble: 2 × 4
+#   Survived     n  mean    SD
+# <fct>    <int> <dbl> <dbl>
+#   1 No         549  30.2  12.7
+# 2 Yes        342  28.1  14.1
+# 
+# 
+# Punktbasierte Korrelation:
+#   [,1]
+# [1,] -0.09899649
+
+visualisierung_1Var_2Var(datensatz, "Survived", "Age")
+ggsave("Survived_Age_box.png",
+       plot = visualisierung_1Var_2Var(datensatz, "Survived", "Age"),
+       width = 8, height = 5, dpi = 300)
+
+#----------------------------------------------------------------------
+deskriptive_bivariate_metrisch_dichotom(datensatz, "Survived", "Fare")
+
+# Deskriptive Statistiken nach Gruppen:
+#   # A tibble: 2 × 4
+#   Survived     n  mean    SD
+# <fct>    <int> <dbl> <dbl>
+#   1 No         549  22.1  31.4
+# 2 Yes        342  48.4  66.6
+# 
+# 
+# Punktbasierte Korrelation:
+#   [,1]
+# [1,] 0.327468                              
+
+visualisierung_1Var_2Var(datensatz, "Survived", "Fare")
+ggsave("Survived_Fare_box.png",
+       plot = visualisierung_1Var_2Var(datensatz, "Survived", "Fare"),
+       width = 8, height = 5, dpi = 300)
 
 
+# ============================
+# (vi) visualisierung()
+# ============================
+visualisierung(datensatz, "Survived", "Sex", "Seite")
+ggsave("Survived_Sex_Seite.png",
+       plot = visualisierung(datensatz, "Survived", "Sex", "Seite"),
+       width = 10, height = 6, dpi = 300)
 
 
 
