@@ -1,5 +1,4 @@
 source("Aufgabe2-Funktionen-R-Skript 2.R")
-
 library(ggplot2)
 
 
@@ -35,8 +34,13 @@ df <- c("b" , "f" , "f")
 # ii. (Paul)
 
 # berechnet deskriptive Statistiken für kategoriale Merkmale
-deskriptive_kategoriell= function(data){
-
+deskriptive_kategoriell <- function(data){
+  
+  # checken ob die Eingabe kategoriell ist
+if (!is.character(data) && !is.factor(data)) {
+  stop(paste("Die Eingabe muss kategorisch sein."))
+   }
+  
   #modalwert berechnen indem der Name der häufigsten Merkmalsausprägung
   #ausgegeben wird
   
@@ -57,8 +61,8 @@ deskriptive_kategoriell= function(data){
   
 }
 #Testen dieser Funktion:
-data = c("A", "B", "D", "E", "C", "A")
-test = deskriptive_kategoriell(data)
+data <- c("A", "B", "D", "E", "C", "A")
+test <- deskriptive_kategoriell(data)
 if(!all(test$Modalwert == "A")){
   print("Fehler im Test")
 }
@@ -77,6 +81,12 @@ library(vcd)  # Für Assoziationsmaße wie Phi-Koeffizient
 
 # Funktion: Deskriptive bivariate Statistik für den Zusammenhang zwischen zwei kategoriale Variablen
 deskriptive_bivariate_kategorial <- function(data, var1, var2) {
+  
+  # Prüfen, ob eine der Variablen numerisch ist
+  # Falls ja: Abbruch, da die Funktion nur für kategoriale Variablen gedacht ist
+  if (is.numeric(data[[var1]]) || is.numeric(data[[var2]])) {
+    stop("Beide Variablen müssen kategorial sein.")
+  }
   
   # Kontingenztabelle
   cat("\nKontingenztabelle:\n")
@@ -124,67 +134,74 @@ library(dplyr)
 library(psych) #Punktbasierte Korrelation 
 
 # data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
-deskriptive_bivariate_metrisch_dichotom <- function(data, dichotom_var, metric_var){
+deskriptive_bivariate_metrisch_dichotom <- function(data, var1, var2) {
   
-  # Checks
-  if (!(dichotom_var %in% names(data)) || !(metric_var %in% names(data))) {
+  if (!(var1 %in% names(data)) || !(var2 %in% names(data))) {
     stop("Eine oder beide Variablen existieren nicht im Datensatz.")
   }
   
-  if (length(unique(data[[dichotom_var]])) != 2) {
-    stop("Die erste Variable muss dichotom sein.")
+  # Typen erkennen
+  if (length(unique(na.omit(data[[var1]]))) == 2 && is.numeric(data[[var2]])) {
+    dichotom_var <- var1
+    metric_var <- var2
+  } else if (length(unique(na.omit(data[[var2]]))) == 2 && is.numeric(data[[var1]])) {
+    dichotom_var <- var2
+    metric_var <- var1
+  } else {
+    stop("Es muss eine dichotome und eine metrische Variable übergeben werden.")
   }
   
-  if (!is.numeric(data[[metric_var]])) {
-    stop("Die zweite Variable muss metrisch sein.")
-  }
-  
-  #Deskriptive Statistiken nach Gruppen
-  # Übergibt den Datensatz mithilfe des Pipe-Operators (%>%) und gruppiert ihn nach der dichotomen Variable
+  # Deskriptive Statistiken
   descriptives <- data %>%
-    
-  # Gruppierung nach den Ausprägungen der dichotomen Variable
-  group_by(.data[[dichotom_var]]) %>%
-    # Berechnung der deskriptiven Kennwerte je Gruppe
+    group_by(.data[[dichotom_var]]) %>%
     summarise(
-      n = n(),                             # Stichprobengröße pro Gruppe
-      mean = mean(.data[[metric_var]]),    # Mittelwert der metrischen Variable
-      SD = sd(.data[[metric_var]])         # Standardabweichung der metrischen Variable
+      n = n(),
+      mean = mean(.data[[metric_var]], na.rm = TRUE),
+      SD = sd(.data[[metric_var]], na.rm = TRUE),
+      .groups = "drop"
     )
-# Ausgabe der deskriptiven Statistiken
-cat("\nDeskriptive Statistiken nach Gruppen:\n")
-print(descriptives)
-
-# Punktbasierte Korrelation
-# Berechnung der punktbasierten Korrelation zwischen der dichotomen und der metrischen Variable
-# Die dichotome Variable wird zuerst in einen Faktor und anschließend in numerische Werte (0/1) umgewandelt
-point_biserial <- biserial(
-  data[[metric_var]],
-  as.numeric(as.factor(data[[dichotom_var]]))
-)
-
-# Ausgabe der Korrelation
-cat("\nPunktbasierte Korrelation:\n")
-print(point_biserial)
-
-# Ergebnisse werden als Liste zurückgegeben
-invisible(list("Deskriptive Statistiken nach Gruppen" = descriptives, "Punktbasierte Korrelation" = point_biserial))
+  
+  cat("\nDeskriptive Statistiken nach Gruppen:\n")
+  print(descriptives)
+  
+  # Punktbiseriale Korrelation
+  point_biserial <- biserial(
+    data[[metric_var]],
+    as.numeric(as.factor(data[[dichotom_var]]))
+  )
+  
+  cat("\nPunktbasierte Korrelation:\n")
+  print(point_biserial)
+  
+  invisible(list(
+    Deskriptive_Statistiken = descriptives,
+    Punktbiseriale_Korrelation = point_biserial
+  ))
 }
+
 
 # Test mit Titanic Datensatz
 titanic <- read.csv("titanic_clean.csv")
-deskriptive_bivariate_metrisch_dichotom(data = titanic, "Survived", "Age")
+deskriptive_bivariate_metrisch_dichotom(data = titanic, "Age", "Survived")
 
 
-# 2.v) Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
+# 2.v) (Henning)
+# Gestapeltes Balkendiagramm für 3 oder 4 kategoriale Variablen
 # Eingabe:
 # - data: Datensatz
 # - ... : 3 oder 4 Variablennamen als Strings (z.B. "Sex", "Pclass", "Survived")
 # Ausgabe:
 # - ggplot-Objekt (Plot) welcher die Variablen 1 und 2 vergleicht und die Variablen 3 und 4 als Facets darstellt
 
-visualisierung <- function(data, ...) {
+visualisierung <- function(data, ..., ignore_na = TRUE) {
   var <- check(data, ...)  # var ist ein Vektor mit 3 oder 4 Variablennamen
+  
+  
+  # NA´s entfernen
+  if (ignore_na) {
+    data <- data[stats::complete.cases(data[, var]), ]
+  }
+  
   
   # Basisplot: 1. Variable auf x,die  2. Variable wird als Farbe dargestellt
   p <- ggplot(data, aes_string(x = var[1], fill = var[2])) +
@@ -209,3 +226,105 @@ visualisierung <- function(data, ...) {
   
   return(p)
 }
+
+
+# vi.) (Jannis)
+
+visualisierung_1Var_2Var <- function(data, ...) {
+  vars <- c(...)
+  
+  check_vars(data,vars)
+  # -----------------------
+  # 1 Variable
+  # -----------------------
+  if (length(vars) == 1) {
+    v <- vars[1]
+    data2 <- data[!is.na(data[[v]]), ]
+    
+    if (!is_cat(data2[[v]])) {
+      # metrisch
+      p <- ggplot(data2, aes(x = .data[[v]])) +
+        geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+        labs(
+          title = paste("Histogramm von", v),
+          x = v,
+          y = "Anzahl"
+        ) +
+        theme_minimal()
+      
+      return(p)
+      
+    } else {
+      # kategorial
+      p <- ggplot(data2, aes(x = .data[[v]])) +
+        geom_bar(
+          aes(y = after_stat(count / sum(count))),
+          fill = "steelblue"
+        ) +
+        scale_y_continuous(labels = scales::percent) +
+        labs(
+          title = paste("Relative Häufigkeit von", v),
+          x = v,
+          y = "Relative Häufigkeit"
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+  }
+  
+  # -----------------------
+  # 2 Variablen
+  # -----------------------
+  if (length(vars) == 2) {
+    v1 <- vars[1]
+    v2 <- vars[2]
+    
+    data2 <- data[complete.cases(data[, vars]), ]
+    
+    cat1 <- is_cat(data2[[v1]])
+    cat2 <- is_cat(data2[[v2]])
+    
+    # kategorial + metrisch
+    if (cat1 != cat2) {
+      cat_var <- if (cat1) v1 else v2
+      met_var <- if (cat1) v2 else v1
+      
+      p <- ggplot(data2, aes(x = .data[[cat_var]], y = .data[[met_var]])) +
+        geom_boxplot(fill = "steelblue") +
+        labs(
+          title = paste("Boxplot:", met_var, "nach", cat_var),
+          x = cat_var,
+          y = met_var
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+    
+    # 2 kategorial
+    if (cat1 && cat2) {
+      p <- ggplot(data2, aes(x = .data[[v1]], fill = .data[[v2]])) +
+        geom_bar(position = "stack") +
+        labs(
+          title = paste("Beziehung:", v1, "und", v2),
+          x = v1,
+          y = "Anzahl",
+          fill = v2
+        ) +
+        theme_minimal()
+      
+      return(p)
+    }
+    
+    stop("Kombination nicht unterstützt.")
+  }
+  
+  stop("Bitte 1 oder 2 Variablen übergeben.")
+}
+
+
+visualisierung_1Var_2Var(titanic_clean,"Age")
+visualisierung_1Var_2Var(titanic_clean, "Sex")
+visualisierung_1Var_2Var(titanic_clean, "Sex", "Survived")
+visualisierung_1Var_2Var(titanic_clean, "Embarked", "Survived")
