@@ -246,9 +246,9 @@ ggsave("Survived_Fare_box.png",
 # ============================
 # (vi) visualisierung()
 # ============================
-visualisierung(datensatz, "Survived", "Sex", "Seite")
-ggsave("Survived_Sex_Seite.png",
-       plot = visualisierung(datensatz, "Survived", "Sex", "Seite"),
+visualisierung(datensatz, "Survived", "Sex", "Pclass")
+ggsave("Survived_Sex_Pclass.png",
+       plot = visualisierung(datensatz, "Survived", "Sex", "Pclass"),
        width = 10, height = 6, dpi = 300)
 
 
