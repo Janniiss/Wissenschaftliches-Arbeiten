@@ -34,7 +34,7 @@ df <- c("b" , "f" , "f")
 # ii. (Paul)
 
 # berechnet deskriptive Statistiken für kategoriale Merkmale
-deskriptive_kategoriell= function(data){
+deskriptive_kategoriell <- function(data){
   
   # checken ob die Eingabe kategoriell ist
 if (!is.character(data) && !is.factor(data)) {
@@ -61,8 +61,8 @@ if (!is.character(data) && !is.factor(data)) {
   
 }
 #Testen dieser Funktion:
-data = c("A", "B", "D", "E", "C", "A")
-test = deskriptive_kategoriell(data)
+data <- c("A", "B", "D", "E", "C", "A")
+test <- deskriptive_kategoriell(data)
 if(!all(test$Modalwert == "A")){
   print("Fehler im Test")
 }
