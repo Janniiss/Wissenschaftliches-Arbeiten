@@ -1,0 +1,260 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+\geometry{left=2cm,right=2cm,top=2.5cm,bottom=2.5cm}
+\begin{document}
+
+\begin{titlepage}
+    \centering
+
+    {\Large Technische Universität Dortmund \par}
+    {\large Fakultät Statistik \par}
+    {\large Kurs: Wissenschaftliches Arbeiten \par}
+
+    \vspace{6cm}
+
+    {\Huge \textbf{Deskriptive Analyse des Titanic-Datensatzes} \par}
+
+    \vspace{6cm}
+
+    {\large Gruppenmitglieder: \par}
+    \vspace{0.2cm}
+
+    {\large
+    \begin{tabular}{c}
+        Paul Dickmann \\
+        Henning Hans\\
+        Katharina Hautzinger\\
+        Johannes Röhrig\\
+        Jannis Straub\\
+    \end{tabular}
+    \par}
+
+    \vspace{2cm}
+
+    {\large Dozent: Steffen Maletz \par}
+    {\large Abgabedatum: 08.02.2026 \par}
+
+    \vfill
+\end{titlepage}
+
+
+\tableofcontents
+\newpage
+
+\onehalfspacing
+
+\section{Einleitung}
+Ziel dieser Analyse ist es, herauszufinden, welche Faktoren die Überlebenschancen beim Untergang der Titanic, beeinflusst haben. Die Analyse basiert auf einem Datensatz über die Passagiere der Titanic aus dem Jahr 1912 zum Zeitpunkt des Schiffunglückes. Der Datensatz umfasst demographische Daten wie Geschlecht und Alter, sozio-ökonomische Merkmale wie Klasse und Ticketpreis sowie Daten über das Überleben. Zuerst wurde der Datensatz bereinigt. Anschließend erfolgte eine deskriptive Analyse, um Zusammenhänge und Unterschiede zwischen Überlebenden und Nicht-Überlebenden herauszufinden.
+
+\section{Beschreibung der Passagiergruppe}
+Zu Beginn der Analyse wurden die demographischen Merkmale der Passagiere auf 
+der Titanic betrachtet. 64.8\,\% der Fahrgäste waren Männer, 35.2\,\% Frauen.
+Männer waren also deutlich in der Mehrheit. Das könnte daran liegen, dass die Crew auf dem Schiff wahrscheinlich vornehmlich aus Männern bestand.
+
+\noindent Noch genauer kann man die Zusammensetzung der Passagiergruppe über die verschiedenen Anreden analysieren. 60.4\,\% wurden mit Mr angesprochen, waren also erwachsene Männer. 20.8\,\% waren unverheiratete Frauen (Anrede: Miss) und 14.4\,\% verheiratete Frauen (Anrede: Mrs). Außerdem bestanden die Passagiere zu 4.5\,\% auch aus kleinen Jungen (Anrede: Master). 
+
+\noindent Weitergehend wurde die Altersverteilung der Passagiere beim Untergang analysiert (vgl. Abb. \ref{fig:alter}). Auf dem Schiff befanden sich Menschen im Alter von 0.42 bis 80 Jahren. Das arithmetische Mittel des Alters liegt bei 29.4 Jahren, während der Median und der Modalwert bei 30 Jahren liegen. Alle drei Werte liegen also ziemlich nah beieinander, was auf eine symmetrische Verteilung hindeutet. Das untere Quartil liegt bei 21 Jahren, das obere Quartil bei 35 Jahren. Die mittleren 50\,\% der Passagiere waren also zwischen 21 und 35 Jahre alt. Auch in Abb. \ref{fig:alter} sieht man, dass die meisten Passagiere in der Klasse (25,30] einzuordnen sind.  Die Standardabweichung liegt bei 13.25. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{AgeHistogramm.png}
+    \caption{Histogramm zur Verteilung des Alters der Passagiere}
+    \label{fig:alter}
+\end{figure}
+
+
+\noindent Außerdem wurde auch die Verteilung der Passagiere auf die verschiedenen Buchungsklassen betrachtet (vgl. Abb. \ref{fig:class}). Mit 55.1\,\% hatten die meisten Kabinen der 3.Klasse gebucht. Die restlichen Passagiere verteilten sich ungefähr gleichmäßig auf die 1. und 2.Klasse: 24.2\,\% aller Passagiere waren in der 1.Klasse untergebracht und 20.7\,\% in der 2.Klasse. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Pclass_Balkendiagramm.png}
+    \caption{Balkendiagramm zur Verteilung der Buchungsklassen der Passagiere}
+    \label{fig:class}
+\end{figure}
+
+\noindent Zuletzt wurde zur sozio-ökonomischen Beschreibung der Passagiergruppe die Variable Ticketpreis analysiert (vgl. Abb. \ref{fig:Fare}). Die Ticketpreise erstreckten sich von 0~\pounds\ bis 512.3292~\pounds\ . Das arithmetische Mittel liegt bei 32.2~\pounds\, der Median bei 14.5~\pounds\ und der Modalwert bei 8.05~\pounds\ , was auf eine rechtsschiefe Verteilung hindeutet. Das untere Quartil liegt bei 7.8958~\pounds\ , das obere Quartil bei 31~\pounds\ . Die mittleren 50\,\% der Passagiere bezahlten also zwischen 7.8958~\pounds\ und 31~\pounds\ . In Abb. \ref{fig:Fare} sieht man, dass die meisten Passagiere in der Klasse [0,25] einzuordnen sind. Die Standardabweichung liegt bei 49.69~\pounds\ .
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{FareHistogramm.png}
+    \caption{Balkendiagramm zur Verteilung der Ticketpreise der Passagiere}
+    \label{fig:Fare}
+\end{figure}
+
+\noindent Zur Überlebensverteilung lässt sich sagen, dass 38.4\,\% der Passagiere überlebt haben, während die restlichen 61.6\,\% beim Untergang der Titanic gestorben sind. Die Überlebenden waren also in der Minderheit. 
+
+\noindent Insgesamt lässt sich zur Zusammensetzung der Passagiere auf der Titanic sagen, dass mehr Männer als Frauen auf der Titanic waren und sich alle im Alter zwischen 0 und 80 Jahren befanden, wobei die Hälfte zwischen 21 und 35 Jahren war. Außerdem gehörten die meisten der Passagiere zur 3.Klasse, wobei die Hälfte aller Passagiere zwischen 7.8958~\pounds\ und 31~\pounds\ für ihr Ticket bezahlten. Außerdem ist die Mehrheit der Passagiere beim Untergang gestorben.
+
+\section{Zusammenhang zwischen Geschlecht und Überlebensrate}
+
+
+Zunächst wurde der Zusammenhang der Variablen „Sex“ (male/female) und „Survived“ (Yes/No) untersucht. Die 
+Kontingenztabelle zeigt, dass insgesamt mehr Männer (577) als Frauen (314) an Bord waren, jedoch mehr Frauen
+(233) als Männer (109) überlebt haben. Die relativen Häufigkeiten verdeutlichen dies: Etwa 65 \% der Passagiere
+waren Männer, von denen nur ca. 19 \% überlebten, während bei den Frauen etwa 74 \% überlebten.\\
+Auch die spaltenweisen relativen Häufigkeiten bestätigen den Zusammenhang: Rund 85 \% der Nicht-Überlebenden 
+waren Männer, während etwa 68 \% der Überlebenden Frauen waren.\\
+Der Eindruck eines Zusammenhangs zwischen Geschlecht und Überlebensrate wird zusätzlich durch das korrigierte 
+Kontingenzmaß nach Pearson gestützt, das mit ca. 0.67 einen starken Zusammenhang anzeigt.\\
+Das gestapelte Balkendiagramm (vgl. Abb. \ref{fig:SexSurvived}) bestätigt diese Ergebnisse ebenfalls: Obwohl mehr Männer an Bord waren, ist der 
+Anteil der Überlebenden bei Frauen deutlich höher, wodurch der zuvor festgestellte Zusammenhang visuell 
+verdeutlicht wird.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{Sex_Survived.png}
+    \caption{Überlebensanteil nach Geschlecht}
+    \label{fig:SexSurvived}
+\end{figure}
+
+
+\noindent Hinsichtlich der Interpretation dieser Ergebnisse lässt sich festhalten, dass dieser unterschiedliche Überlebensanteil wahrscheinlich mit dem Prinzip „Frauen und Kinder zuerst“ begründet ist. 
+Demnach wurden bei der Rettung der Passagiere der Titanic, konkret bezogen auf die Besetzung der Rettungsboote, Frauen und Kinder bevorzugt. Dadurch wurden Männer als letztes gerettet, beziehungsweise waren somit die meisten der Passagiere, welche nicht gerettet werden konnten, männlich. 
+Zudem halfen Männer eher dabei, die Rettungsboote zu besetzen, blieben also länger auf der Titanic zurück, weshalb die Überlebenschancen geringer waren. 
+Dass jedoch nicht ausschließlich Frauen überlebt haben, liegt also vor allem daran, dass viele gerettete Kinder männlich waren.
+
+
+\section{Zusammenhang zwischen Überlebensrate und Klassen}
+
+Ein weiterer untersuchter Zusammenhang betrifft die Variablen „Pclass“ (1, 2, 3) und „Survived“ (Yes/No). Die 
+Kontingenztabelle zeigt, dass die meisten Passagiere der 3. Klasse angehörten und nicht überlebt haben (372). 
+Auffällig ist zudem, dass nur in der 1. Klasse die Mehrheit überlebt hat (136).\\
+
+\noindent Betrachtet man die relativen Häufigkeiten, zeigt sich ein deutlicher Unterschied zwischen den Klassen: In der 1. Klasse überlebten 
+etwa 63 \% der Passagiere, in der 2. Klasse ca. 47 \% und in der 3. Klasse nur ca. 24 \%. Gleichzeitig fällt auf, dass der größte 
+Anteil der Überlebenden aus der 1. Klasse stammt (ca. 40 \%), während der größte Anteil der Nicht-Überlebenden aus der 3. Klasse 
+kommt (ca. 68 \%).\\
+Diese Ergebnisse deuten darauf hin, dass die Überlebensrate mit der Klasse zunahm: Je höher die Klasse, desto größer die 
+Wahrscheinlichkeit zu überleben. Das korrigierte Kontingenzmaß nach Pearson beträgt ca. 0.455 und weist damit auf einen mittleren
+Zusammenhang hin. Der Wert ist moderat, da sich die Überlebensraten der 2. und 3. Klasse zwar unterscheiden, aber nicht so stark
+wie die der 1. Klasse.\\
+Das gestapelte Balkendiagramm (vgl. Abb. \ref{fig:SurvivedPclass}) visualisiert diese Eindrücke: Während die 3. Klasse die größte Passagierzahl aufweist, ist der Anteil 
+der Überlebenden in der 1. Klasse deutlich am höchsten und in der 3. Klasse am niedrigsten.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Survived_Pclass.png}
+    \caption{Überlebensanteil nach Klassen}
+    \label{fig:SurvivedPclass}
+\end{figure}
+
+
+\noindent Bezüglich der Interpretation dieser Ergebnisse lässt sich festhalten, dass der unterschiedliche Überlebensanteil innerhalb der Klassen vor allem in der Lage der Klassen innerhalb des Schiffes begründet liegt.
+Die 1. Klasse lag oben im Schiff, die 2.Klasse mittig, und die 3.Klasse weiter unten im Schiff. Ausgehend davon, dass die Passagiere vom oberen Teil des Schiffes aus in die Rettungsboote evakuiert wurden, war also die Entfernung der 1.Klasse zu den Rettungsbooten am geringsten und von der 3.Klasse am höchsten. 
+Diese unterschiedlichen Ausgangslagen begründen also weshalb der Überlebensanteil der niedrigeren Klasse geringer waren.
+Zudem konnte aufgrund der kürzeren Distanz und der geringeren Anzahl an Passagieren der 1.Klasse, diese schneller von der Schiffscrew erreicht und informiert werden, was schließlich in einer schnelleren Evakuierung von einem Großteil der 1.Klasse mündete.
+
+
+\section{Zusammenhang zwischen Überleben und Alter}
+Die deskriptiven Statistiken zeigen nur geringe Unterschiede: Nicht-Überlebende waren im Mittel etwas älter (M = 30.2; SD = 12.7) als 
+Überlebende (M = 28.1; SD = 14.1). Die punktbiseriale Korrelation beträgt 
+r = –0.099 und weist auf einen sehr schwachen negativen Zusammenhang hin.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Survived_Age_box.png}
+    \caption{Boxplot des Alters nach Überlebensstatus}
+    \label{fig:age}
+\end{figure}
+\noindent Der Boxplot (vgl. Abb. \ref{fig:age}) zeigt stark überlappende 
+Altersverteilungen mit ähnlichen IQRs. Beide Gruppen sind leicht 
+rechtsschief, wobei Ausreißer im höheren Altersbereich bei Nicht-
+Überlebenden häufiger auftreten.\\
+Insgesamt zeigen sich nur geringfügige Lageunterschiede, sodass das Alter 
+keinen klaren Trennfaktor zwischen den Gruppen darstellt.
+
+\newpage
+\section{Zusammenhang zwischen Überleben und Fahrpreis}
+Zwischen Fahrpreis und Überleben zeigt sich ein deutlich stärkerer 
+Zusammenhang. Überlebende zahlten im Mittel einen höheren Fahrpreis (M =
+48.4; SD = 66.6) als Nicht-Überlebende (M = 22.1; SD = 31.4). Die 
+punktbiseriale Korrelation von r = 0.327 weist auf einen moderaten 
+positiven Zusammenhang hin, sodass mit steigenden Fahrpreisen auch die 
+Überlebenswahrscheinlichkeit zunimmt.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Survived_Fare_box.png}
+    \caption{Boxplot des Fahrpreises nach Überlebensstatus}
+    \label{fig:fare}
+\end{figure}
+
+\noindent Der Boxplot (vgl. Abb. \ref{fig:fare}) verdeutlicht diese 
+Beziehung durch eine klare Verschiebung der Verteilung zu höheren 
+Fahrpreisen bei den Überlebenden. Ihr Median liegt deutlich über dem der 
+Nicht-Überlebenden, zudem ist der Interquartilsabstand größer, was auf 
+eine stärkere Streuung der mittleren Werte hindeutet. In der Gruppe der 
+Nicht-Überlebenden treten zahlreiche hohe Ausreißer auf, die zu einer 
+ausgeprägten Rechtsschiefe der Verteilung führen.\\
+Insgesamt unterstützen sowohl die deskriptiven Kennwerte als auch die 
+grafische Darstellung die Annahme, dass höhere Fahrpreise - und damit 
+indirekt eine höhere soziale Stellung - mit einer höheren 
+Überlebenswahrscheinlichkeit verbunden waren.
+
+
+\section{Zusammenhang zwischen Überleben, Geschlecht und Klasse}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Survived_Sex_Pclass.png}
+    \caption{Überlebensstatus nach Geschlecht und Klasse}
+    \label{fig:Pclass}
+\end{figure}
+
+Das gestapelte Balkendiagramm (vgl. Abb. \ref{fig:Pclass}) zeigt deutliche
+Unterschiede im Überlebensstatus nach Geschlecht und Klasse. Über alle 
+Klassen hinweg ist der Anteil der Überlebenden bei Frauen deutlich höher 
+als bei Männern. Besonders ausgeprägt ist dieser Unterschied in der 1. und 
+2. Klasse: In der 1. Klasse überleben rund 65 \% der Frauen, in der 2. 
+Klasse knapp 80 \%. Bei Männern dominieren in diesen Klassen die Nicht-
+Überlebenden.\\
+Ein möglicher Grund dafür ist die bessere Zugänglichkeit zu Rettungsbooten 
+und die Priorisierung von Frauen (und Kindern) bei der Evakuierung, 
+wodurch Frauen der 1. Klasse schneller Zugang zu Rettungsmitteln hatten.\\
+In der 3. Klasse zeigt sich ein anderes Muster: relativ betrachtet 
+überleben dort die meisten Männer, während der Anteil überlebender Frauen 
+am geringsten ist. Da in der 3. Klasse zudem knapp 55 \% der Passagiere 
+reisten (vgl. Abb. \ref{fig:class}) – also die größte Gruppe insgesamt – 
+beeinflusst dieses Muster die Gesamtstatistik stark. Schlechtere 
+Unterbringung und geringerer Zugang zu Rettungsbooten könnten dazu geführt
+haben, dass Frauen der 3. Klasse besonders benachteiligt waren.\\
+Insgesamt verdeutlicht die Darstellung, dass sowohl Geschlecht als auch 
+soziale Klasse die Überlebenswahrscheinlichkeit beeinflussen, wobei Frauen
+und Passagiere höherer Klassen tendenziell bessere Chancen hatten.
+
+
+
+
+\section{Fazit}
+Die Analyseergebnisse lassen sich in mehreren zentralen Punkten zusammenfassen. Die Passagiere der Titanic waren überwiegend männlich, wobei das durchschnittliche Alter bei etwa 30 Jahren lag. Hinsichtlich der Klassenzugehörigkeit zeigte sich, dass der Großteil der Reisenden der 3. Klasse angehörte, während die 1. Klasse als teuerste Kategorie die geringste Anzahl an Passagieren umfasste.\\
+Die Untersuchung der Überlebensraten – insbesondere in Bezug auf Geschlecht und Klassenzugehörigkeit – ergab deutliche Unterschiede. Von den insgesamt rund 60 \% der Überlebenden waren die Mehrheit Frauen. Neben dem Geschlecht bestand zudem ein klarer Zusammenhang zwischen der Überlebenswahrscheinlichkeit und der gebuchten Klasse. Ausschlaggebend hierfür waren vor allem unterschiedliche Priorisierungen bei der Rettung sowie die räumliche Lage der einzelnen Klassen an Bord. Die vergleichsweise hohe Überlebensrate der Passagiere der 1. Klasse deutet zudem darauf hin, dass höhere Ticketpreise mit einer erhöhten Überlebenswahrscheinlichkeit einhergingen.
+
+\newpage
+\section{Anhang}
+\textbf{Aufteilung des Berichts}\\
+Katharina Hautzinger:\\
+1. Einleitung\\
+2. Beschreibung der Passagiergruppe\\
+
+\noindent Johannes Röhrig:\\
+3. Zusammenhang zwischen Geschlecht und Überlebensrate\\
+4. Zusammenhang zwischen Überlebensrate und Klassen\\
+8. Fazit\\
+
+\noindent Jannis Straub:\\
+5. Zusammenhang zwischen Überleben und Alter\\
+6. Zusammenhang zwischen Überleben und Fahrpreis\\
+7. Zusammenhang zwischen Überleben, Geschlecht und Klasse\\
+
+\end{document}
