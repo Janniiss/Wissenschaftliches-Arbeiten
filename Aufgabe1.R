@@ -107,5 +107,5 @@ setwd("/Users/henninghans/Documents/GitHub/Wissenschaftliches-Arbeiten")
 write.csv(datensatz, "titanic_clean.csv", row.names = FALSE)
 # Der bereinigte Datensatz wird als "titanic_clean.csv" gespeichert
 
-
+save(datensatz , file = "titanic_clean.RData")
 
