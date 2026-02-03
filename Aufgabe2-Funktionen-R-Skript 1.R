@@ -233,44 +233,33 @@ visualisierung <- function(data, ..., ignore_na = TRUE) {
 visualisierung_1Var_2Var <- function(data, ...) {
   vars <- c(...)
   
-  check_vars(data,vars)
+  check_vars(data, vars)
+  
+  
   # -----------------------
   # 1 Variable
   # -----------------------
   if (length(vars) == 1) {
     v <- vars[1]
+    check_cat(data, v)
     data2 <- data[!is.na(data[[v]]), ]
+
     
-    if (!is_cat(data2[[v]])) {
-      # metrisch
-      p <- ggplot(data2, aes(x = .data[[v]])) +
-        geom_histogram(bins = 30, fill = "steelblue", color = "white") +
-        labs(
-          title = paste("Histogramm von", v),
-          x = v,
-          y = "Anzahl"
-        ) +
-        theme_minimal()
-      
-      return(p)
-      
-    } else {
-      # kategorial
-      p <- ggplot(data2, aes(x = .data[[v]])) +
-        geom_bar(
-          aes(y = after_stat(count / sum(count))),
-          fill = "steelblue"
-        ) +
-        scale_y_continuous(labels = scales::percent) +
-        labs(
-          title = paste("Relative Häufigkeit von", v),
-          x = v,
-          y = "Relative Häufigkeit"
-        ) +
-        theme_minimal()
-      
-      return(p)
-    }
+    # kategorial
+    p <- ggplot(data2, aes(x = .data[[v]])) +
+      geom_bar(
+        aes(y = after_stat(count / sum(count))),
+        fill = "steelblue"
+      ) +
+      scale_y_continuous(labels = scales::percent) +
+      labs(
+        title = paste("Relative Häufigkeit von", v),
+        x = v,
+        y = "Relative Häufigkeit"
+      ) +
+      theme_minimal()
+    
+    return(p)
   }
   
   # -----------------------
@@ -324,7 +313,7 @@ visualisierung_1Var_2Var <- function(data, ...) {
 }
 
 
-visualisierung_1Var_2Var(titanic_clean,"Age")
+visualisierung_1Var_2Var(datensatz, "Age")
 visualisierung_1Var_2Var(titanic_clean, "Sex")
 visualisierung_1Var_2Var(titanic_clean, "Sex", "Survived")
 visualisierung_1Var_2Var(titanic_clean, "Embarked", "Survived")

@@ -70,3 +70,11 @@ return(vars)
     is.factor(x) || is.character(x)
   }
 
+check_cat <- function(data, v) {
+    if (!is_cat(data[[v]])) {
+      stop(paste(
+        "Fehler: Für eine einzelne metrische Variable ist keine Visualisierung vorgesehen:",
+        v
+      ))
+    }
+  }
