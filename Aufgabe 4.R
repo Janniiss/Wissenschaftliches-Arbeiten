@@ -32,6 +32,15 @@ deskriptive_metrisch(datensatz$Age) # deskriptive Kennwerte zum Alter ausrechnen
 # $Variationskoeffizient
 # [1] 0.4512142
 
+names(sort(table(datensatz$Age), decreasing = TRUE))[1] # Modalwert des Alters ausrechnen
+# [1] "30"
+
+Quantil_Funktion(datensatz$Age , 0.25) # unteres Quartil berechnen
+# [1] 21
+
+Quantil_Funktion(datensatz$Age, 0.75) # oberes Quartil berechnen
+# [1] 35
+
 visualisierung_1Var_2Var(datensatz, "Age") # Alter-Verteilung visualisieren
 ggsave("Age_Histogramm.png" , 
        plot = visualisierung_1Var_2Var(datensatz, "Age"),
@@ -62,6 +71,15 @@ deskriptive_metrisch(datensatz$Fare) # deskriptive Kennwerte zum Ticketpreis aus
 # 
 # $Variationskoeffizient
 # [1] 1.543073
+
+names(sort(table(datensatz$Fare), decreasing = TRUE))[1] # Modalwert des Ticketpreises ausrechnen
+[1] "8.05"
+
+Quantil_Funktion(datensatz$Fare , 0.25) # unteres Quartil berechnen
+# [1] 7.8958
+
+Quantil_Funktion(datensatz$Fare , 0.75) # oberes Quartil berechnen
+# [1] 31
 
 visualisierung_1Var_2Var(datensatz, "Fare") # Ticketpreis-Verteilung visualisieren
 ggsave("Fare_Histogramm.png" , 
@@ -121,6 +139,25 @@ visualisierung_1Var_2Var(datensatz, "Survived") # Survived-Verteilung visualisie
 ggsave("Survived_Balkendiagramm.png" , 
        plot = visualisierung_1Var_2Var(datensatz, "Survived"),
        width = 8, height = 5 , dpi = 300) # Balkendiagramm zu Survived speichern
+
+# Analyse Pclass:
+deskriptive_kategoriell(datensatz$Pclass) # deskriptive Statistiken zu Pclass
+# $Modalwert
+# [1] "3"
+# 
+# $`Relative häufigkeit`
+# data
+# 1         2         3 
+# 0.2424242 0.2065095 0.5510662 
+# 
+# $Merkmalsausprägungen
+# [1] "1" "2" "3"
+
+visualisierung_1Var_2Var(datensatz, "Pclass") # Klassenverteilung visualisieren
+ggsave("Pclass_Balkendiagramm.png" , 
+       plot = visualisierung_1Var_2Var(datensatz, "Pclass"),
+       width = 8, height = 5 , dpi = 300) # Balkendiagramm zu Pclass speichern
+
 
 
 # Johannes
