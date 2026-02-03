@@ -41,10 +41,11 @@ Quantil_Funktion(datensatz$Age , 0.25) # unteres Quartil berechnen
 Quantil_Funktion(datensatz$Age, 0.75) # oberes Quartil berechnen
 # [1] 35
 
-visualisierung_1Var_2Var(datensatz, "Age") # Alter-Verteilung visualisieren
-ggsave("Age_Histogramm.png" , 
-       plot = visualisierung_1Var_2Var(datensatz, "Age"),
-       width = 8, height = 5 , dpi = 300) # Histogramm zum Alter speichern
+png("AgeHistogramm.png")
+hist(datensatz$Age , col = "steelblue" , freq = FALSE , 
+     breaks = 16 , ylab = "Empirische Dichte" ,
+     las = 1, xlab = "Alter in Jahren" , main = "") # Histogramm zum Alter erstellen
+dev.off()  # Histogramm zum Alter speichern
 
 # Analyse Ticketpreis:
 deskriptive_metrisch(datensatz$Fare) # deskriptive Kennwerte zum Ticketpreis ausrechnen
@@ -81,10 +82,11 @@ Quantil_Funktion(datensatz$Fare , 0.25) # unteres Quartil berechnen
 Quantil_Funktion(datensatz$Fare , 0.75) # oberes Quartil berechnen
 # [1] 31
 
-visualisierung_1Var_2Var(datensatz, "Fare") # Ticketpreis-Verteilung visualisieren
-ggsave("Fare_Histogramm.png" , 
-       plot = visualisierung_1Var_2Var(datensatz, "Fare"),
-       width = 8, height = 5 , dpi = 300) # Histogramm zum Ticketpreis speichern
+png("FareHistogramm.png")
+hist(datensatz$Fare , col = "steelblue" , freq = FALSE , ylab = "Empirische Dichte" ,
+     las = 1, xlab = "Ticketpreis" , main = "" ,
+     breaks = seq(from = 0 , to = 525, by = 25)) # Histogramm zum Ticketpreis erstellen 
+dev.off() # Histogramm des Ticketpreises abspeichern
 
 # Analyse Sex:
 deskriptive_kategoriell(datensatz$Sex) # deskriptive Statistiken zum Geschlecht 
