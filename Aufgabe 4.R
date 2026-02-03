@@ -123,29 +123,30 @@ ggsave("Survived_Balkendiagramm.png" ,
        width = 8, height = 5 , dpi = 300) # Balkendiagramm zu Survived speichern
 
 
+#(iii)
 # Johannes
 deskriptive_bivariate_kategorial(datensatz,"Sex","Survived")
 # Kontingenztabelle:
 #   
-#   No Yes
+#         No Yes
 # male   468 109
 # female  81 233
 #
 # Relative Häufigkeiten (gesamt):
 #
-#  No        Yes
+#             No        Yes
 # male   0.52525253 0.12233446
 # female 0.09090909 0.26150393
 #
 # Relative Häufigkeiten (zeilenweise):
 #  
-#  No       Yes
+#            No       Yes
 # male   0.8110919 0.1889081
 # female 0.2579618 0.7420382
 #
 # Relative Häufigkeiten (spaltenweise):
 #  
-#  No       Yes
+#            No       Yes
 # male   0.8524590 0.3187135
 # female 0.1475410 0.6812865
 #
@@ -158,43 +159,44 @@ ggsave("Sex_Survived.png",
        plot = visualisierung_1Var_2Var(datensatz,"Sex","Survived"),
        width = 8, height = 5, dpi = 300)
 
-deskriptive_bivariate_kategorial(datensatz,"Survived","Deck")
+deskriptive_bivariate_kategorial(datensatz,"Pclass","Survived")
+
 # Kontingenztabelle:
 #  
-#  A  B  C  D  E  F  G  T
-# No   8 12 24  8  8  5  2  1
-# Yes  7 35 35 25 24  8  2  0
+#   No Yes
+# 1  80 136
+# 2  97  87
+# 3 372 119
 #
 # Relative Häufigkeiten (gesamt):
-#   
-#   A           B           C           D           E           F           G           T
-# No  0.039215686 0.058823529 0.117647059 0.039215686 0.039215686 0.024509804 0.009803922 0.004901961
-# Yes 0.034313725 0.171568627 0.171568627 0.122549020 0.117647059 0.039215686 0.009803922 0.000000000
-# 
-# Relative Häufigkeiten (zeilenweise):
+#  
+#   No        Yes
+# 1 0.08978676 0.15263749
+# 2 0.10886644 0.09764310
+# 3 0.41750842 0.13355780
 #
-#  A          B          C          D          E          F          G          T
-# No  0.11764706 0.17647059 0.35294118 0.11764706 0.11764706 0.07352941 0.02941176 0.01470588
-# Yes 0.05147059 0.25735294 0.25735294 0.18382353 0.17647059 0.05882353 0.01470588 0.00000000
+# Relative Häufigkeiten (zeilenweise):
+#   
+#   No       Yes
+# 1 0.3703704 0.6296296
+# 2 0.5271739 0.4728261
+# 3 0.7576375 0.2423625
 #
 # Relative Häufigkeiten (spaltenweise):
+#  
+#   No       Yes
+# 1 0.1457195 0.3976608
+# 2 0.1766849 0.2543860
+# 3 0.6775956 0.3479532
 #
-#  A         B         C         D         E         F         G         T
-# No  0.5333333 0.2553191 0.4067797 0.2424242 0.2500000 0.3846154 0.5000000 1.0000000
-# Yes 0.4666667 0.7446809 0.5932203 0.7575758 0.7500000 0.6153846 0.5000000 0.0000000
-# 
 # Korrigiertes Kontingenzmaß von Pearson:
-#  X-squared 
-# 0.3100514 
-#
-# Warning message:
-#  In chisq.test(tbl) : Chi-squared approximation may be incorrect
+#   X-squared 
+# 0.45502 
 
 
-
-visualisierung_1Var_2Var(titanic,"Survived","Deck")
-ggsave("Survived_Deck.png",
-       plot = visualisierung_1Var_2Var(datensatz,"Survived","Deck"),
+visualisierung_1Var_2Var(datensatz,"Pclass","Survived")
+ggsave("Survived_Pclass.png",
+       plot = visualisierung_1Var_2Var(datensatz,"Pclass","Survived"),
        width = 8, height = 5, dpi = 300)
 
 
