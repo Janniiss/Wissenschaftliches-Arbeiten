@@ -229,87 +229,110 @@ visualisierung <- function(data, ..., ignore_na = TRUE) {
 
 # vi.) (Jannis)
 
+# Die Funktion nimmt ein Dataframe 'data' und eine oder zwei Variablennamen als Strings entgegen.
 visualisierung_1Var_2Var <- function(data, ...) {
-  vars <- c(...)
-  
-  check_vars(data, vars)
-  
+  vars <- c(...)         
+  # Prüft, ob die übergebenen Variablen im Dataframe existieren mit Helferfunktion
+  check_vars(data, vars)  
   
   # -----------------------
-  # 1 Variable
+  # Fall 1: 1 Variable
   # -----------------------
   if (length(vars) == 1) {
-    v <- vars[1]
-    check_cat(data, v)
-    data2 <- data[!is.na(data[[v]]), ]
-
+    v <- vars[1]          
+    # Prüft, ob 'v' eine kategoriale Variable ist
+    check_cat(data, v)    
     
-    # kategorial
+    # Entferne alle Zeilen, bei denen 'v' NA ist
+    # Damit werden keine fehlenden Werte geplottet
+    data2 <- data[!is.na(data[[v]]), ]  
+    
+    # Erzeuge ein Balkendiagramm der relativen Häufigkeiten
     p <- ggplot(data2, aes(x = .data[[v]])) +
       geom_bar(
-        aes(y = after_stat(count / sum(count))),
-        fill = "steelblue"
+        aes(y = after_stat(count / sum(count))),  # Prozentwerte statt absolute Häufigkeiten
+        fill = "steelblue"                        # Farbe der Balken
       ) +
-      scale_y_continuous(labels = scales::percent) +
-      labs(
-        title = paste("Relative Häufigkeit von", v),
-        x = v,
-        y = "Relative Häufigkeit"
-      ) +
-      theme_minimal()
-    
-    return(p)
+      scale_y_continuous(labels = scales::percent)  # Achsenbeschriftung in Prozent
+    labs(
+      title = paste("Relative Häufigkeit von", v),  # Titel des Plots
+      x = v,                                       # x-Achse = Variable
+      y = "Relative Häufigkeit"                    # y-Achse beschriften
+    ) +
+      theme_minimal()                                
+    # Rückgabe Plot
+    return(p)  
   }
   
   # -----------------------
-  # 2 Variablen
+  # Fall 2: genau 2 Variablen
   # -----------------------
   if (length(vars) == 2) {
-    v1 <- vars[1]
-    v2 <- vars[2]
+    v1 <- vars[1]  # erste Variable
+    v2 <- vars[2]  # zweite Variable
     
+    # Entferne alle Zeilen, in denen mindestens einer der beiden Werte NA ist
     data2 <- data[complete.cases(data[, vars]), ]
     
+    # Prüfen, ob v1 bzw. v2 kategorial sind (TRUE/FALSE)
     cat1 <- is_cat(data2[[v1]])
     cat2 <- is_cat(data2[[v2]])
     
-    # kategorial + metrisch
+    # -----------------------
+    # Fall 2a: eine Variable kategorial, die andere metrisch
+    # -----------------------
     if (cat1 != cat2) {
+      # Bestimme, welche Variable kategorial ist
       cat_var <- if (cat1) v1 else v2
+      
+      # Bestimme, welche Variable metrisch ist
       met_var <- if (cat1) v2 else v1
       
+      # Erzeuge einen Boxplot: metrische Variable nach Kategorien
       p <- ggplot(data2, aes(x = .data[[cat_var]], y = .data[[met_var]])) +
-        geom_boxplot(fill = "steelblue") +
+        geom_boxplot(fill = "steelblue") +  # Boxplot-Farbe
         labs(
-          title = paste("Boxplot:", met_var, "nach", cat_var),
-          x = cat_var,
-          y = met_var
+          title = paste("Boxplot:", met_var, "nach", cat_var),  # Titel
+          x = cat_var,  # x-Achse = kategoriale Variable
+          y = met_var   # y-Achse = metrische Variable
         ) +
-        theme_minimal()
+        theme_minimal()  
       
-      return(p)
+      # Rückgabe Plot
+      return(p)  
     }
     
-    # 2 kategorial
+    # -----------------------
+    # Fall 2b: beide Variablen sind kategorial
+    # -----------------------
     if (cat1 && cat2) {
+      # Erzeuge ein gestapeltes Balkendiagramm:
       p <- ggplot(data2, aes(x = .data[[v1]], fill = .data[[v2]])) +
         geom_bar(position = "stack") +
         labs(
-          title = paste("Beziehung:", v1, "und", v2),
-          x = v1,
-          y = "Anzahl",
-          fill = v2
+          title = paste("Beziehung:", v1, "und", v2),  # Titel
+          x = v1,                                      # x-Achse
+          y = "Anzahl",                                # y-Achse
+          fill = v2                                    # Legendenbezeichnung
         ) +
-        theme_minimal()
-      
-      return(p)
+        theme_minimal() 
+      # Rückgabe Plot
+      return(p)  
     }
     
+    # -----------------------
+    # Fall 2c: beide Variablen sind metrisch
+    # -----------------------
+    # Dieser Fall wird aktuell nicht unterstützt.
     stop("Kombination nicht unterstützt.")
   }
   
+  # -----------------------
+  # Fall: mehr als 2 Variablen übergeben
+  # -----------------------
   stop("Bitte 1 oder 2 Variablen übergeben.")
 }
+
 
 
 visualisierung_1Var_2Var(datensatz, "Age")

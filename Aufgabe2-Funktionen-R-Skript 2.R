@@ -69,7 +69,7 @@ return(vars)
   is_cat <- function(x) {
     is.factor(x) || is.character(x)
   }
-
+  # Hilfsfunktion: Überprüft, ob eine Variable im Datensatz kategorial ist und gibt ansonsten einen Fehler aus
 check_cat <- function(data, v) {
     if (!is_cat(data[[v]])) {
       stop(paste(
