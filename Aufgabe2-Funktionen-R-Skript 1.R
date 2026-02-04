@@ -133,7 +133,6 @@ deskriptive_bivariate_kategorial(data = titanic, "Survived", "Sex")
 library(dplyr)
 library(psych) #Punktbasierte Korrelation 
 
-# data = Datensatz, dichotom_var = Name der dichotomen Variable, metric_var = Name der metrischen Variable
 deskriptive_bivariate_metrisch_dichotom <- function(data, var1, var2) {
   
   if (!(var1 %in% names(data)) || !(var2 %in% names(data))) {
